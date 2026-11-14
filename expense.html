@@ -1,0 +1,748 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PaisaLog | Money Journal</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap');
+
+:root {
+    --bg: #f5f3ec;
+    --paper: #fffefa;
+    --green: #244c3b;
+    --light-green: #e4eee5;
+    --orange: #d98255;
+    --text: #252c27;
+    --muted: #898e87;
+    --border: #e9e7df;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    padding: 35px 20px;
+}
+
+.app {
+    max-width: 1080px;
+    margin: auto;
+}
+
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 28px;
+    border-bottom: 1px solid #deded4;
+    margin-bottom: 35px;
+}
+
+.logo {
+    font-size: 25px;
+    font-weight: 800;
+    letter-spacing: -1.5px;
+    color: var(--green);
+}
+
+.logo span {
+    color: var(--orange);
+}
+
+.header-right {
+    font-size: 12px;
+    color: var(--muted);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+
+.intro {
+    margin-bottom: 30px;
+}
+
+.intro small {
+    color: var(--orange);
+    font-weight: 700;
+    letter-spacing: 2px;
+    font-size: 11px;
+}
+
+.intro h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(32px, 5vw, 48px);
+    font-weight: 600;
+    margin-top: 8px;
+    letter-spacing: -1px;
+}
+
+.intro p {
+    color: var(--muted);
+    font-size: 14px;
+    margin-top: 8px;
+}
+
+
+
+.balance-box {
+    background: var(--green);
+    color: white;
+    padding: 30px;
+    border-radius: 5px;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 22px;
+}
+
+.balance-box::after {
+    content: "₹";
+    position: absolute;
+    right: 35px;
+    top: -45px;
+    font-size: 190px;
+    font-family: Georgia, serif;
+    color: rgba(255,255,255,0.06);
+}
+
+.balance-label {
+    color: #c4d5c9;
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+}
+
+.balance-amount {
+    font-size: clamp(34px, 6vw, 46px);
+    font-weight: 700;
+    margin-top: 12px;
+    letter-spacing: -2px;
+    position: relative;
+    z-index: 1;
+}
+
+.balance-note {
+    color: #c4d5c9;
+    font-size: 12px;
+    margin-top: 12px;
+}
+
+/* Statistics */
+
+.stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    margin-bottom: 32px;
+}
+
+.stat {
+    background: var(--paper);
+    padding: 22px;
+    border: 1px solid var(--border);
+    border-radius: 5px;
+}
+
+.stat-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.stat-label {
+    font-size: 12px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.stat-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    font-size: 17px;
+}
+
+.in-icon {
+    background: var(--light-green);
+    color: var(--green);
+}
+
+.out-icon {
+    background: #f8e9df;
+    color: var(--orange);
+}
+
+.stat h2 {
+    font-size: 27px;
+    margin-top: 15px;
+    letter-spacing: -1px;
+}
+
+.green {
+    color: var(--green);
+}
+
+.orange {
+    color: var(--orange);
+}
+
+
+
+.workspace {
+    display: grid;
+    grid-template-columns: 0.85fr 1.5fr;
+    gap: 22px;
+    align-items: start;
+}
+
+.panel {
+    background: var(--paper);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 25px;
+}
+
+.panel-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 22px;
+}
+
+.panel-heading h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+}
+
+.panel-heading span {
+    color: var(--muted);
+    font-size: 11px;
+}
+
+
+
+label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #666e65;
+}
+
+input, select {
+    width: 100%;
+    background: #f8f7f2;
+    border: 1px solid #e7e5dc;
+    padding: 13px;
+    margin-bottom: 18px;
+    border-radius: 4px;
+    outline: none;
+    font-family: inherit;
+    color: var(--text);
+    font-size: 13px;
+}
+
+input:focus, select:focus {
+    border-color: var(--green);
+}
+
+.type-select {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 18px;
+}
+
+.type-option {
+    border: 1px solid var(--border);
+    background: #f8f7f2;
+    padding: 12px 5px;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 12px;
+    color: #747a72;
+}
+
+.type-option.active {
+    background: var(--light-green);
+    border-color: var(--green);
+    color: var(--green);
+    font-weight: 700;
+}
+
+.submit-btn {
+    background: var(--green);
+    color: white;
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.submit-btn:hover {
+    background: #18382a;
+    transform: translateY(-1px);
+}
+
+
+
+.transaction-list {
+    min-height: 150px;
+}
+
+.transaction {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--border);
+    gap: 10px;
+}
+
+.transaction:last-child {
+    border-bottom: none;
+}
+
+.transaction-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+}
+
+.transaction-symbol {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    font-size: 16px;
+}
+
+.transaction-symbol.income-symbol {
+    background: var(--light-green);
+    color: var(--green);
+}
+
+.transaction-symbol.expense-symbol {
+    background: #f8e9df;
+    color: var(--orange);
+}
+
+.transaction-info h4 {
+    font-size: 13px;
+    font-weight: 700;
+    overflow-wrap: anywhere;
+}
+
+.transaction-info p {
+    color: var(--muted);
+    font-size: 11px;
+    margin-top: 4px;
+}
+
+.transaction-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+}
+
+.transaction-amount {
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.delete-btn {
+    background: transparent;
+    border: none;
+    color: #b4aaa0;
+    cursor: pointer;
+    font-size: 18px;
+    padding: 5px;
+}
+
+.delete-btn:hover {
+    color: #d34e43;
+}
+
+.empty {
+    text-align: center;
+    padding: 45px 10px;
+    color: var(--muted);
+    font-size: 13px;
+}
+
+.empty span {
+    display: block;
+    font-size: 30px;
+    margin-bottom: 12px;
+}
+
+footer {
+    text-align: center;
+    padding: 35px 0 10px;
+    color: var(--muted);
+    font-size: 11px;
+    letter-spacing: 1px;
+}
+
+@media(max-width: 700px) {
+    body {
+        padding: 22px 14px;
+    }
+
+    .workspace {
+        grid-template-columns: 1fr;
+    }
+
+    .stats {
+        gap: 10px;
+    }
+
+    .stat {
+        padding: 16px;
+    }
+
+    .stat h2 {
+        font-size: 21px;
+    }
+
+    .balance-box {
+        padding: 25px;
+    }
+
+    .header-right {
+        font-size: 9px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+    <header>
+        <div class="logo">paisa<span>log.</span></div>
+        <div class="header-right">MY PERSONAL MONEY JOURNAL</div>
+    </header>
+
+    <section class="intro">
+        <small>YOUR MONEY, YOUR RULES</small>
+        <h1>Know where it goes.</h1>
+        <p>A little clarity makes a big difference. Keep track of every rupee.</p>
+    </section>
+
+    <section class="balance-box">
+        <div class="balance-label">Available balance</div>
+        <div class="balance-amount" id="balance">₹0.00</div>
+        <div class="balance-note">Your income minus your expenses.</div>
+    </section>
+
+    <section class="stats">
+
+        <div class="stat">
+            <div class="stat-top">
+                <span class="stat-label">Money in</span>
+                <span class="stat-icon in-icon">↗</span>
+            </div>
+            <h2 class="green" id="income">₹0.00</h2>
+        </div>
+
+        <div class="stat">
+            <div class="stat-top">
+                <span class="stat-label">Money out</span>
+                <span class="stat-icon out-icon">↙</span>
+            </div>
+            <h2 class="orange" id="expense">₹0.00</h2>
+        </div>
+
+    </section>
+
+    <section class="workspace">
+
+        
+        <div class="panel">
+
+            <div class="panel-heading">
+                <h2>New entry</h2>
+                <span>01 / ADD</span>
+            </div>
+
+            <form id="form">
+
+                <label>TRANSACTION TYPE</label>
+
+                <div class="type-select">
+                    <div class="type-option active" data-type="income">
+                        ↗ Income
+                    </div>
+                    <div class="type-option" data-type="expense">
+                        ↙ Expense
+                    </div>
+                </div>
+
+                <label>WHAT WAS IT FOR?</label>
+                <input type="text" id="description"
+                    placeholder="e.g. Monthly pocket money" required>
+
+                <label>AMOUNT (₹)</label>
+                <input type="number" id="amount"
+                    placeholder="0.00" min="0.01" step="0.01" required>
+
+                <label>DATE</label>
+                <input type="date" id="date" required>
+
+                <button type="submit" class="submit-btn">
+                    + Save transaction
+                </button>
+
+            </form>
+        </div>
+
+        
+
+        <div class="panel">
+
+            <div class="panel-heading">
+                <h2>Money journal</h2>
+                <span id="count">0 ENTRIES</span>
+            </div>
+
+            <div class="transaction-list" id="list">
+                <div class="empty">
+                    <span>◷</span>
+                    Your journal is empty.<br>
+                    Add your first transaction!
+                </div>
+            </div>
+
+        </div>
+
+    </section>
+
+    <footer>
+        MADE BY :- AASHISHJOGII
+    </footer>
+
+</div>
+
+<script>
+
+let transactions = JSON.parse(
+    localStorage.getItem("paisaTransactions")
+) || [];
+
+let selectedType = "income";
+
+
+document.getElementById("date").value =
+    new Date().toLocaleDateString("en-CA");
+
+
+document.querySelectorAll(".type-option").forEach(option => {
+
+    option.addEventListener("click", function() {
+
+        document.querySelectorAll(".type-option").forEach(item => {
+            item.classList.remove("active");
+        });
+
+        this.classList.add("active");
+
+        selectedType = this.dataset.type;
+
+    });
+
+});
+
+
+document.getElementById("form").addEventListener("submit", function(e) {
+
+    e.preventDefault();
+
+    const description = document.getElementById("description").value.trim();
+    const amount = Number(document.getElementById("amount").value);
+    const date = document.getElementById("date").value;
+
+    if (!description || !Number.isFinite(amount) || amount <= 0 || !date) {
+        alert("Please enter valid transaction details.");
+        return;
+    }
+
+    const transaction = {
+        id: Date.now(),
+        description: description,
+        amount: amount,
+        date: date,
+        type: selectedType
+    };
+
+    transactions.unshift(transaction);
+
+    saveData();
+    render();
+
+    this.reset();
+
+    document.getElementById("date").value =
+        new Date().toLocaleDateString("en-CA");
+
+});
+
+function saveData() {
+
+    localStorage.setItem(
+        "paisaTransactions",
+        JSON.stringify(transactions)
+    );
+
+}
+
+
+function formatMoney(amount) {
+
+    return "₹" + amount.toLocaleString("en-IN", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+    });
+
+}
+
+
+function render() {
+
+    const list = document.getElementById("list");
+
+    list.innerHTML = "";
+
+    let totalIncome = 0;
+    let totalExpense = 0;
+
+    transactions.forEach(item => {
+
+        if (item.type === "income") {
+            totalIncome += item.amount;
+        } else {
+            totalExpense += item.amount;
+        }
+
+        const div = document.createElement("div");
+        div.className = "transaction";
+
+        const left = document.createElement("div");
+        left.className = "transaction-left";
+
+        const symbol = document.createElement("div");
+        symbol.className = "transaction-symbol " +
+            (item.type === "income" ? "income-symbol" : "expense-symbol");
+
+        symbol.textContent = item.type === "income" ? "↗" : "↙";
+
+        const info = document.createElement("div");
+        info.className = "transaction-info";
+
+        const heading = document.createElement("h4");
+        heading.textContent = item.description;
+
+        const date = document.createElement("p");
+        date.textContent = item.date + " · " + item.type;
+
+        info.appendChild(heading);
+        info.appendChild(date);
+
+        left.appendChild(symbol);
+        left.appendChild(info);
+
+        const right = document.createElement("div");
+        right.className = "transaction-right";
+
+        const amount = document.createElement("span");
+        amount.className = "transaction-amount " +
+            (item.type === "income" ? "green" : "orange");
+
+        amount.textContent =
+            (item.type === "income" ? "+" : "-") +
+            formatMoney(item.amount);
+
+        const del = document.createElement("button");
+        del.className = "delete-btn";
+        del.textContent = "×";
+        del.title = "Delete transaction";
+
+        del.addEventListener("click", function() {
+            deleteTransaction(item.id);
+        });
+
+        right.appendChild(amount);
+        right.appendChild(del);
+
+        div.appendChild(left);
+        div.appendChild(right);
+
+        list.appendChild(div);
+
+    });
+
+    if (transactions.length === 0) {
+
+        list.innerHTML = `
+            <div class="empty">
+                <span>◷</span>
+                Your journal is empty.<br>
+                Add your first transaction!
+            </div>
+        `;
+
+    }
+
+
+    document.getElementById("income").textContent =
+        formatMoney(totalIncome);
+
+    document.getElementById("expense").textContent =
+        formatMoney(totalExpense);
+
+    document.getElementById("balance").textContent =
+        formatMoney(totalIncome - totalExpense);
+
+    document.getElementById("count").textContent =
+        transactions.length + " ENTRIES";
+
+}
+
+function deleteTransaction(id) {
+
+    transactions = transactions.filter(item => item.id !== id);
+
+    saveData();
+    render();
+
+}
+
+render();
+
+</script>
+
+</body>
+</html>
